@@ -1,7 +1,7 @@
 /*EQUIPO TACOS LINUXEROS*/
 #include <stdio.h>
 #include <stdbool.h>
-
+//Falta incluir la libreria pthread.h
 #define LIMITE_SUPERIOR 100000
 
 typedef struct {
@@ -24,7 +24,7 @@ void* contarPrimos(void* args) {
     ThreadArgs* argumentos = (ThreadArgs*) args;
     int cuenta = 0;
     
-    for (int i = argumentos->inicio; i <= argumentos->fin; ++2i) {
+    for (int i = argumentos->inicio; i <= argumentos->fin; ++2i) { //el incremento deberia de ser ++i en vez de ++2i
         if (esPrimo(i)) {
             cuenta++;
         }
@@ -39,21 +39,21 @@ int main() {
     
     
     ThreadArgs args1 = {1, mitad, 0};             
-    ThreadArgs args2 = {mitad + 1, LIMITE_INFERIOR, 0};  
+    ThreadArgs args2 = {mitad + 1, LIMITE_INFERIOR, 0};   //la variable LIMITE_INFERIOR no está declarada
 
     pthread_t hilo1, hilo2;
 
-    if (pthread_create(&hilo1, NULL, contarPrimos, (void*)args1) != 0) {
+    if (pthread_create(&hilo1, NULL, contarPrimos, (void*)args1) != 0) { //Se tiene que hacer el cuarto argumento ( (void*)&args1) porque se esta apuntando a un struct
         perror("Error al crear el primer hilo");
         return 1;
     }
 
-    if (pthread_join(&hilo2, NULL, contarPrimos, (void*)&args2) != 0) {
+    if (pthread_join(&hilo2, NULL, contarPrimos, (void*)&args2) != 0) { //En esta parte del código se deberia de cambiar a pthread_create para poder crear el hilo en cuestión
         perror("Error al crear el segundo hilo");
         return 1;
     }
 
-    if (pthread_create(hilo1, NULL) != 0) {
+    if (pthread_create(hilo1, NULL) != 0) {  //En esta parte del código deberia de cambiarse a pthread_join para poder unir el primer hilo correctamente
         perror("Error al unir el primer hilo");
         return 1;
     }
